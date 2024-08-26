@@ -327,7 +327,7 @@ const RecommendedTableContent = () => {
                 accessorKey: 'ComplianceId',
                 cell: (props) => (
                     <Tooltip title={`Compliance ID: ${props.getValue()}`} placement="top">
-                        <div className="w-28 truncate">{props.getValue()}</div>
+                        <div className="w-20 truncate">{props.getValue()}</div>
                     </Tooltip>
                 ),
             },
@@ -338,7 +338,7 @@ const RecommendedTableContent = () => {
                     const value = props.getValue() as string;
                     return (
                         <Tooltip title={value} placement="top">
-                            <div className="w-40 truncate">{value.length > 20 ? value.substring(0, 20) + '...' : value}</div>
+                            <div className="w-36 truncate">{value.length > 20 ? value.substring(0, 20) + '...' : value}</div>
                         </Tooltip>
                     );
                 },
@@ -360,7 +360,7 @@ const RecommendedTableContent = () => {
                 accessorKey: 'ComplianceCategorization',
                 cell: (props) => (
                     <Tooltip title={props.getValue() as string} placement="top">
-                        <div className="w-32 truncate">{props.getValue()}</div>
+                        <div className="w-36 truncate">{props.getValue()}</div>
                     </Tooltip>
                 ),
             },

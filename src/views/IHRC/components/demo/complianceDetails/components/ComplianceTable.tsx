@@ -166,117 +166,8 @@ const dummyData: DataRow[] =  [
         Scheduled_Frequency: "Yearly",
         Proof_Of_Compliance_Mandatory: "Yes"
     },
-    {
-        Compliance_Id: 9023,
-        Legislation: "West Bengal Shops and Establishments Act 1963 and West Bengal Shops Rules 1964/ West Bengal/ IR",
-        Compliance_Categorization: "REPORTING",
-        Compliance_Header: "Monthly Employee Attendance Report",
-        Compliance_Description: "File a monthly employee attendance report in Form XII to the Labour Inspector by the 7th of each month.",
-        Penalty_Description: "Penalty of Rs. 500 for late submission",
-        Compliance_Applicability: "EMPLOYERS",
-        Bare_Act_Text: "Report any discrepancies in attendance records within fifteen days, with a fee of ten rupees per report.",
-        Compliance_Clause: "Section 15 and Rule 20",
-        Compliance_Type: "Ongoing",
-        Compliance_Frequency: "Monthly",
-        Compliance_Statutory_Authority: "LABOUR INSPECTOR",
-        Approval_Required: "No",
-        Criticality: "Medium",
-        Penalty_Type: "Fine",
-        Default_Due_Date: "7th of each month",
-        First_Due_Date: "07-Feb-18",
-        Due_Date: "07-Feb-18",
-        Scheduled_Frequency: "Monthly",
-        Proof_Of_Compliance_Mandatory: "Yes"
-    },
-    {
-        Compliance_Id: 1034,
-        Legislation: "Punjab Shops and Commercial Establishments Act 1958 and Punjab Shops Rules 1959/ Punjab/ IR",
-        Compliance_Categorization: "LICENSE / REGISTRATION",
-        Compliance_Header: "Trade License Renewal",
-        Compliance_Description: "Renew the trade license in Form VIII at least 60 days before the license expiry date, and submit it to the Municipal Corporation with the required fee.",
-        Penalty_Description: "Late renewal fee up to Rs. 400",
-        Compliance_Applicability: "TRADE LICENSE HOLDERS",
-        Bare_Act_Text: "If the trade license is lost, report to the Municipal Corporation within seven days and apply for a duplicate license with a fee of twenty rupees.",
-        Compliance_Clause: "Section 7 and Rule 10",
-        Compliance_Type: "On Going",
-        Compliance_Frequency: "Annually",
-        Compliance_Statutory_Authority: "MUNICIPAL CORPORATION",
-        Approval_Required: "Yes",
-        Criticality: "High",
-        Penalty_Type: "Fine",
-        Default_Due_Date: "1st July 1st January",
-        First_Due_Date: "01-Jul-17",
-        Due_Date: "01-Jul-17",
-        Scheduled_Frequency: "Yearly",
-        Proof_Of_Compliance_Mandatory: "Yes"
-    },
-    {
-        Compliance_Id: 2145,
-        Legislation: "Kerala Shops and Commercial Establishments Act 1960 and Kerala Shops Rules 1961/ Kerala/ IR",
-        Compliance_Categorization: "REGISTRATION / REPORTING",
-        Compliance_Header: "Bi-Annual Safety Inspection Report",
-        Compliance_Description: "Submit a bi-annual safety inspection report in Form XX to the Safety Inspector by the 10th of the first month following each six-month period.",
-        Penalty_Description: "Fine up to Rs. 750 for late submission",
-        Compliance_Applicability: "SHOPS AND ESTABLISHMENTS",
-        Bare_Act_Text: "Report any safety incidents immediately to the Safety Inspector within ten days, with a fee of twenty-five rupees per incident.",
-        Compliance_Clause: "Section 18 and Rule 12",
-        Compliance_Type: "Ongoing",
-        Compliance_Frequency: "Bi-Annually",
-        Compliance_Statutory_Authority: "SAFETY INSPECTOR",
-        Approval_Required: "No",
-        Criticality: "High",
-        Penalty_Type: "Fine",
-        Default_Due_Date: "10th of January and July",
-        First_Due_Date: "10-Jan-18",
-        Due_Date: "10-Jan-18",
-        Scheduled_Frequency: "Bi-Annually",
-        Proof_Of_Compliance_Mandatory: "Yes"
-    },
-    {
-        Compliance_Id: 3257,
-        Legislation: "Andhra Pradesh Shops and Establishments Act 1988 and Andhra Pradesh Shops Rules 1990/ Andhra Pradesh/ IR",
-        Compliance_Categorization: "LICENSE / REGISTRATION",
-        Compliance_Header: "License Renewal for New Premises",
-        Compliance_Description: "For new premises, apply for a license renewal in Form III within 30 days of starting operations, submitting it to the Local Authority with the required fee.",
-        Penalty_Description: "Penalty up to Rs. 200 for late renewal",
-        Compliance_Applicability: "NEW ESTABLISHMENTS",
-        Bare_Act_Text: "Notify the Local Authority within seven days if the license is lost or destroyed, and apply for a duplicate with a fee of ten rupees.",
-        Compliance_Clause: "Section 8 and Rule 9",
-        Compliance_Type: "On Going",
-        Compliance_Frequency: "Annually",
-        Compliance_Statutory_Authority: "LOCAL AUTHORITY",
-        Approval_Required: "Yes",
-        Criticality: "Medium",
-        Penalty_Type: "Fine",
-        Default_Due_Date: "1st August 1st February",
-        First_Due_Date: "01-Aug-17",
-        Due_Date: "01-Aug-17",
-        Scheduled_Frequency: "Yearly",
-        Proof_Of_Compliance_Mandatory: "Yes"
-    },
-    {
-        Compliance_Id: 4368,
-        Legislation: "Gujarat Shops and Establishments Act 1948 and Gujarat Shops Rules 1950/ Gujarat/ IR",
-        Compliance_Categorization: "REPORTING",
-        Compliance_Header: "Annual Employee Benefits Report",
-        Compliance_Description: "File an annual report of employee benefits in Form XI with the Labour Department by the end of each financial year.",
-        Penalty_Description: "Fine up to Rs. 600 for late submission",
-        Compliance_Applicability: "EMPLOYERS",
-        Bare_Act_Text: "Notify any changes in employee benefits within fifteen days of the change, with a fee of fifteen rupees per change report.",
-        Compliance_Clause: "Section 20 and Rule 16",
-        Compliance_Type: "Ongoing",
-        Compliance_Frequency: "Annually",
-        Compliance_Statutory_Authority: "LABOUR DEPARTMENT",
-        Approval_Required: "No",
-        Criticality: "Medium",
-        Penalty_Type: "Fine",
-        Default_Due_Date: "31st March",
-        First_Due_Date: "31-Mar-18",
-        Due_Date: "31-Mar-18",
-        Scheduled_Frequency: "Yearly",
-        Proof_Of_Compliance_Mandatory: "Yes"
-    },
-    
+
+
 ];
 
 
@@ -343,7 +234,7 @@ const ComplianceTableContent: React.FC = () => {
                     const value = props.getValue() as string
                     return (
                         <Tooltip title={value} placement="top">
-                            <div className="w-40 truncate">
+                            <div className="w-36 truncate">
                                 {value}
                             </div>
                         </Tooltip>
@@ -369,9 +260,9 @@ const ComplianceTableContent: React.FC = () => {
                 id: 'viewDetails',
                 cell: (props) => (
                     <div className="w-24 flex justify-center">
-                        <Tooltip title="View Details" placement="left">
+                        {/* <Tooltip title="View Details" placement="left"> */}
                             <ViewDetailsButton compliance={props.row.original} />
-                        </Tooltip>
+                        {/* </Tooltip> */}
                     </div>
                 ),
             },
