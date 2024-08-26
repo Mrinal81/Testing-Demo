@@ -8,7 +8,7 @@ import type { NavigationTree } from '@/@types/navigation'
 const navigationConfig: NavigationTree[] = [
     {
         key: 'home',
-        path: '/home',
+        path: '/dashboard',
         title: 'Dashboard',
         translateKey: 'nav.home',
         icon: 'home',
@@ -26,9 +26,9 @@ const navigationConfig: NavigationTree[] = [
         authority: [],
         subMenu: [
             {
-                key: 'collapseMenu.item1',
-                path: '/collapse-menu-item-view-1',
-                title: 'Compliances Details',
+                key: 'recommendedList.item1',
+                path: '/recommended-checklist',
+                title: 'Recommended Checklist',
                 translateKey: 'nav.collapseMenu.item1',
                 icon: '',
                 type: NAV_ITEM_TYPE_ITEM,
@@ -36,9 +36,9 @@ const navigationConfig: NavigationTree[] = [
                 subMenu: [],
             },
             {
-                key: 'collapseMenu.item2',
-                path: '/collapse-menu-item-view-2',
-                title: 'Recommended Checklist',
+                key: 'complianceDetail.item2',
+                path: '/compliance-detail',
+                title: 'Compliance Details',
                 translateKey: 'nav.collapseMenu.item2',
                 icon: '',
                 type: NAV_ITEM_TYPE_ITEM,
@@ -46,8 +46,8 @@ const navigationConfig: NavigationTree[] = [
                 subMenu: [],
             },
             {
-                key: 'collapseMenu.item3',
-                path: '/collapse-menu-item-view-3',
+                key: 'assignChecklist.item3',
+                path: '/assign-checklist',
                 title: 'Assigned Checklist',
                 translateKey: 'nav.collapseMenu.item3',
                 icon: '',

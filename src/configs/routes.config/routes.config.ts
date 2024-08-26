@@ -13,15 +13,15 @@ export const protectedRoutes = [
         authority: [],
     },
     /** Example purpose only, please remove */
+    // {
+    //     key: 'singleMenuItem',
+    //     path: '/single-menu-view',
+    //     component: lazy(() => import('@/views/IHRC/components/demo/SingleMenuView')),
+    //     authority: [],
+    // },
     {
-        key: 'singleMenuItem',
-        path: '/single-menu-view',
-        component: lazy(() => import('@/views/IHRC/components/demo/SingleMenuView')),
-        authority: [],
-    },
-    {
-        key: 'complianceDetail.item1',
-        path: '/collapse-menu-item-view-1',
+        key: 'recommendedList.item1',
+        path: '/recommended-checklist',
         component: lazy(() => import('@/views/IHRC/components/demo/recommendedList/RecommendedList')),
         authority: [],
     },
@@ -33,39 +33,39 @@ export const protectedRoutes = [
         authority: [],
     },
     {
-        key: 'recommendedList.item2',
-        path: '/collapse-menu-item-view-2',
+        key: 'complianceDetail.item2',
+        path: '/compliance-detail',
         component: lazy(() => import('@/views/IHRC/components/demo/complianceDetails/ComplianceDetails')),
         authority: [],
     },
     {
-        key: 'recommendedList.item3',
-        path: '/collapse-menu-item-view-3',
+        key: 'assignChecklist.item3',
+        path: '/assign-checklist',
         component: lazy(() => import('@/views/IHRC/components/demo/assignChecklist/AssignChecklist')),
         authority: [],
     },
-    {
-        key: 'groupMenu.single',
-        path: '/group-single-menu-item-view',
-        component: lazy(() =>
-            import('@/views/IHRC/components/demo/GroupSingleMenuItemView')
-        ),
-        authority: [],
-    },
-    {
-        key: 'groupMenu.collapse.item1',
-        path: '/group-collapse-menu-item-view-1',
-        component: lazy(() =>
-            import('@/views/IHRC/components/demo/GroupCollapseMenuItemView1')
-        ),
-        authority: [],
-    },
-    {
-        key: 'groupMenu.collapse.item2',
-        path: '/group-collapse-menu-item-view-2',
-        component: lazy(() =>
-            import('@/views/IHRC/components/demo/GroupCollapseMenuItemView2')
-        ),
-        authority: [],
-    },
+    // {
+    //     key: 'groupMenu.single',
+    //     path: '/group-single-menu-item-view',
+    //     component: lazy(() =>
+    //         import('@/views/IHRC/components/demo/GroupSingleMenuItemView')
+    //     ),
+    //     authority: [],
+    // },
+    // {
+    //     key: 'groupMenu.collapse.item1',
+    //     path: '/group-collapse-menu-item-view-1',
+    //     component: lazy(() =>
+    //         import('@/views/IHRC/components/demo/GroupCollapseMenuItemView1')
+    //     ),
+    //     authority: [],
+    // },
+    // {
+    //     key: 'groupMenu.collapse.item2',
+    //     path: '/group-collapse-menu-item-view-2',
+    //     component: lazy(() =>
+    //         import('@/views/IHRC/components/demo/GroupCollapseMenuItemView2')
+    //     ),
+    //     authority: [],
+    // },
 ]
