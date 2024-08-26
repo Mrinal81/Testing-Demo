@@ -4,8 +4,9 @@
         "singleMenuItem": "Single menu item",
         "collapseMenu": {
             "collapseMenu": "Audit Checklist",
-            "item1": "Compliance Details",
-            "item2": "Recommended Checklist"
+            "item1": "Recommended Checklist",
+            "item2": "Compliance Details",
+            "item3": "Assign Checklist"
         },
         "groupMenu": {
             "groupMenu": "Group menu",

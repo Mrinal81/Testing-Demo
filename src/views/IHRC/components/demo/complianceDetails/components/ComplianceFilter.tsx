@@ -161,7 +161,7 @@ const ComplianceFilter: React.FC = () => {
         onClose={onDrawerClose}
         onRequestClose={onDrawerClose}
       >
-        <FilterForm ref={formikRef} onSubmitComplete={onDrawerClose} />
+        {/* <FilterForm ref={formikRef} onSubmitComplete={onDrawerClose} /> */}
       </Drawer>
     </>
   )

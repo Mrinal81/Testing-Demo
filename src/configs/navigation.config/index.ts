@@ -45,6 +45,16 @@ const navigationConfig: NavigationTree[] = [
                 authority: [],
                 subMenu: [],
             },
+            {
+                key: 'collapseMenu.item3',
+                path: '/collapse-menu-item-view-3',
+                title: 'Assigned Checklist',
+                translateKey: 'nav.collapseMenu.item3',
+                icon: '',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [],
+                subMenu: [],
+            },
         ],
     },
     // {

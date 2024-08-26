@@ -150,7 +150,7 @@ const RecommendedFilter: React.FC = () => {
         Filter
       </Button>
       <Drawer
-        title="Compliance Filters"
+        title="Recommended Filters"
         isOpen={isOpen}
         footer={
           <DrawerFooter
@@ -161,7 +161,7 @@ const RecommendedFilter: React.FC = () => {
         onClose={onDrawerClose}
         onRequestClose={onDrawerClose}
       >
-        <FilterForm ref={formikRef} onSubmitComplete={onDrawerClose} />
+        {/* <FilterForm ref={formikRef} onSubmitComplete={onDrawerClose} /> */} 
       </Drawer>
     </>
   )

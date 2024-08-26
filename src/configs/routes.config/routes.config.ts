@@ -22,9 +22,10 @@ export const protectedRoutes = [
     {
         key: 'complianceDetail.item1',
         path: '/collapse-menu-item-view-1',
-        component: lazy(() => import('@/views/IHRC/components/demo/complianceDetails/ComplianceDetails')),
+        component: lazy(() => import('@/views/IHRC/components/demo/recommendedList/RecommendedList')),
         authority: [],
     },
+    
     {
         key: 'complianceDetail.complianceItem',
         path:  `${APP_PREFIX_PATH}/IHRC/compliance-list-detail/:complianceID`,
@@ -34,7 +35,13 @@ export const protectedRoutes = [
     {
         key: 'recommendedList.item2',
         path: '/collapse-menu-item-view-2',
-        component: lazy(() => import('@/views/IHRC/components/demo/recommendedList/RecommendedList')),
+        component: lazy(() => import('@/views/IHRC/components/demo/complianceDetails/ComplianceDetails')),
+        authority: [],
+    },
+    {
+        key: 'recommendedList.item3',
+        path: '/collapse-menu-item-view-3',
+        component: lazy(() => import('@/views/IHRC/components/demo/assignChecklist/AssignChecklist')),
         authority: [],
     },
     {
