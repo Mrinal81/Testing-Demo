@@ -356,7 +356,7 @@ const ComplianceTableContent: React.FC = () => {
                 cell: (props) => {
                     const { Compliance_Description } = props.row.original
                     return (
-                        <Tooltip title={Compliance_Description} placement="top">
+                        <Tooltip title={Compliance_Description} placement="left">
                             <div className="w-64 lg:w-96 truncate">
                                 {Compliance_Description}
                             </div>

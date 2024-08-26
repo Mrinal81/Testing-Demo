@@ -275,7 +275,7 @@ const complianceData: ComplianceRow[] = [
 ];
 
 
-const RecommendedTableContent: React.FC = () => {
+const RecommendedTableContent = () => {
     const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
 
     const isAllSelected = useMemo(
@@ -314,10 +314,12 @@ const RecommendedTableContent: React.FC = () => {
                 ),
                 id: 'select',
                 cell: ({ row }) => (
-                    <Checkbox
+                    <div>
+                        <Checkbox
                         checked={selectedItems.has(row.original.ComplianceId)}
                         onChange={() => handleCheckboxChange(row.original.ComplianceId)}
-                    />
+                        />
+                        </div>
                 ),
             },
             {
@@ -368,7 +370,7 @@ const RecommendedTableContent: React.FC = () => {
                 cell: (props) => {
                     const value = props.getValue() as string;
                     return (
-                        <Tooltip title={value} placement="top">
+                        <Tooltip title={value} placement="left">
                             <div className="w-64 truncate">{value.length > 50 ? value.substring(0, 50) + '...' : value}</div>
                         </Tooltip>
                     );
@@ -421,7 +423,6 @@ const RecommendedTableContent: React.FC = () => {
                 onPaginationChange={onPaginationChange}
                 onSelectChange={onSelectChange}
                 onSort={onSort}
-                style={{ width: '100%' }}
             />
         </div>
     )
