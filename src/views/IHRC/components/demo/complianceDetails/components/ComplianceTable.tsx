@@ -4,16 +4,12 @@ import Badge from '@/components/ui/Badge'
 import useThemeClass from '@/utils/hooks/useThemeClass'
 import { useNavigate } from 'react-router-dom'
 import cloneDeep from 'lodash/cloneDeep'
-import type {
-    OnSortParam,
-    ColumnDef,
-} from '@/components/shared/DataTable'
-import { Button } from '@/components/ui'
+import type { OnSortParam, ColumnDef } from '@/components/shared/DataTable'
+import { Button, Tooltip } from '@/components/ui'
 
+// Define the DataRow interface with only the required fields
 interface DataRow {
     Compliance_Id: number;
-    IHRC_Company_Name: string;
-    Location: string;
     Legislation: string;
     Compliance_Categorization: string;
     Compliance_Header: string;
@@ -22,214 +18,266 @@ interface DataRow {
     Compliance_Applicability: string;
     Bare_Act_Text: string;
     Compliance_Clause: string;
+    Compliance_Type: string;
+    Compliance_Frequency: string;
+    Compliance_Statutory_Authority: string;
+    Approval_Required: string;
+    Criticality: string;
+    Penalty_Type: string;
+    Default_Due_Date: string;
+    First_Due_Date: string;
+    Due_Date: string;
+    Scheduled_Frequency: string;
+    Proof_Of_Compliance_Mandatory: string;
 }
 
-const dummyData: DataRow[] = [
-  {
-    Compliance_Id: 3236,
-    IHRC_Company_Name: "",
-    Location: "HMVL - Office - Muzaffarpur - sadtpur - HR/ Muzaffarpur/ Bihar/ Office",
-    Legislation: "Bihar Shops and Establishments Act, 1953 and Bihar Shops Establishments Rules, 1955/ Bihar/ IR",
-    Compliance_Categorization: "LICENSE / REGISTRATION",
-    Compliance_Header: "Renewal of Registration",
-    Compliance_Description: "Apply for renewal of certificate of registration in Form IA in duplicate, not less than thirty days before the date on which the certificate of registration expires to the Inspecting Officer, along with the prescribed fees.",
-    Penalty_Description: "Fine which may extend to Rs. 250",
-    Compliance_Applicability: "EVERY EMPLOYER",
-    Bare_Act_Text: "Make an application when registration certificate is lost or destroyed to the Inspecting Officer within seven days of such loss or destruction, for a duplicate copy along with a payment of a fee of two rupees, either by crossed Indian Postal Order or by d",
-    Compliance_Clause: "Section 6 and Rule 3 A."
-},
-{
-    Compliance_Id: 3237,
-    IHRC_Company_Name: "",
-    Location: "ABC - Office - Patna - sadtpur - HR/ Patna/ Bihar/ Office",
-    Legislation: "Bihar Shops and Establishments Act, 1953 and Bihar Shops Establishments Rules, 1955/ Bihar/ IR",
-    Compliance_Categorization: "LICENSE / REGISTRATION",
-    Compliance_Header: "Apply for New License",
-    Compliance_Description: "Apply for a new license in Form IA within thirty days of starting business operations to the Inspecting Officer, along with the prescribed fees.",
-    Penalty_Description: "Fine which may extend to Rs. 500",
-    Compliance_Applicability: "EVERY EMPLOYER",
-    Bare_Act_Text: "Make an application for a new license within thirty days of starting business operations to the Inspecting Officer, along with the prescribed fees.",
-    Compliance_Clause: "Section 5 and Rule 4 A."
-},
-{
-    Compliance_Id: 3238,
-    IHRC_Company_Name: "",
-    Location: "XYZ - Office - Gaya - sadtpur - HR/ Gaya/ Bihar/ Office",
-    Legislation: "Bihar Shops and Establishments Act, 1953 and Bihar Shops Establishments Rules, 1955/ Bihar/ IR",
-    Compliance_Categorization: "LICENSE / REGISTRATION",
-    Compliance_Header: "Annual Return Filing",
-    Compliance_Description: "Submit annual return in Form III to the Labour Department before 31st January each year.",
-    Penalty_Description: "Fine which may extend to Rs. 1000",
-    Compliance_Applicability: "EVERY EMPLOYER",
-    Bare_Act_Text: "Submit annual return in Form III to the Labour Department before 31st January each year, failing which a fine will be imposed.",
-    Compliance_Clause: "Section 9 and Rule 5 B."
-},
-{
-    Compliance_Id: 3239,
-    IHRC_Company_Name: "",
-    Location: "DEF - Office - Bhagalpur - sadtpur - HR/ Bhagalpur/ Bihar/ Office",
-    Legislation: "Bihar Shops and Establishments Act, 1953 and Bihar Shops Establishments Rules, 1955/ Bihar/ IR",
-    Compliance_Categorization: "LICENSE / REGISTRATION",
-    Compliance_Header: "Obtain Trade License",
-    Compliance_Description: "Obtain a trade license from the local municipal authority within thirty days of starting business operations.",
-    Penalty_Description: "Fine which may extend to Rs. 750",
-    Compliance_Applicability: "EVERY EMPLOYER",
-    Bare_Act_Text: "Obtain a trade license from the local municipal authority within thirty days of starting business operations.",
-    Compliance_Clause: "Section 7 and Rule 6 C."
-},
-{
-    Compliance_Id: 3240,
-    IHRC_Company_Name: "",
-    Location: "GHI - Office - Darbhanga - sadtpur - HR/ Darbhanga/ Bihar/ Office",
-    Legislation: "Bihar Shops and Establishments Act, 1953 and Bihar Shops Establishments Rules, 1955/ Bihar/ IR",
-    Compliance_Categorization: "LICENSE / REGISTRATION",
-    Compliance_Header: "Fire Safety Certificate",
-    Compliance_Description: "Obtain a fire safety certificate from the local fire department within sixty days of starting business operations.",
-    Penalty_Description: "Fine which may extend to Rs. 1500",
-    Compliance_Applicability: "EVERY EMPLOYER",
-    Bare_Act_Text: "Obtain a fire safety certificate from the local fire department within sixty days of starting business operations.",
-    Compliance_Clause: "Section 10 and Rule 7 D."
-},  
-{  
-    Compliance_Id: 3241,
-    IHRC_Company_Name: "",
-    Location: "JKL - Office - Purnia - sadtpur - HR/ Purnia/ Bihar/ Office",
-    Legislation: "Bihar Shops and Establishments Act, 1953 and Bihar Shops Establishments Rules, 1955/ Bihar/ IR",
-    Compliance_Categorization: "LICENSE / REGISTRATION",
-    Compliance_Header: "Registration of Establishment",
-    Compliance_Description: "Apply for registration of establishment within thirty days of commencement of business.",
-    Penalty_Description: "Fine which may extend to Rs. 300",
-    Compliance_Applicability: "EVERY EMPLOYER",
-    Bare_Act_Text: "Submit Form II along with necessary documents and prescribed fees for registration.",
-    Compliance_Clause: "Section 11 and Rule 8 E."
-},  
-{  
-    Compliance_Id: 3242,
-    IHRC_Company_Name: "",
-    Location: "MNO - Office - Ara - sadtpur - HR/ Ara/ Bihar/ Office",
-    Legislation: "Bihar Shops and Establishments Act, 1953 and Bihar Shops Establishments Rules, 1955/ Bihar/ IR",
-    Compliance_Categorization: "LICENSE / REGISTRATION",
-    Compliance_Header: "Shop Closure Notice",
-    Compliance_Description: "Notify the local authority of shop closure within fifteen days.",
-    Penalty_Description: "Fine which may extend to Rs. 500",
-    Compliance_Applicability: "EVERY EMPLOYER",
-    Bare_Act_Text: "Submit Form IV to notify the closure of the establishment within fifteen days.",
-    Compliance_Clause: "Section 12 and Rule 9 F."
-},  
-{  
-    Compliance_Id: 3243,
-    IHRC_Company_Name: "",
-    Location: "PQR - Office - Katihar - sadtpur - HR/ Katihar/ Bihar/ Office",
-    Legislation: "Bihar Shops and Establishments Act, 1953 and Bihar Shops Establishments Rules, 1955/ Bihar/ IR",
-    Compliance_Categorization: "LICENSE / REGISTRATION",
-    Compliance_Header: "Employment Registration",
-    Compliance_Description: "Register all employees with the labour department within thirty days of their appointment.",
-    Penalty_Description: "Fine which may extend to Rs. 1000",
-    Compliance_Applicability: "EVERY EMPLOYER",
-    Bare_Act_Text: "Register all employees using Form V within thirty days of their appointment.",
-    Compliance_Clause: "Section 13 and Rule 10 G."
-},  
-{  
-    Compliance_Id: 3244,
-    IHRC_Company_Name: "",
-    Location: "STU - Office - Siwan - sadtpur - HR/ Siwan/ Bihar/ Office",
-    Legislation: "Bihar Shops and Establishments Act, 1953 and Bihar Shops Establishments Rules, 1955/ Bihar/ IR",
-    Compliance_Categorization: "LICENSE / REGISTRATION",
-    Compliance_Header: "Change in Ownership",
-    Compliance_Description: "Notify the labour department of any change in ownership within thirty days.",
-    Penalty_Description: "Fine which may extend to Rs. 750",
-    Compliance_Applicability: "EVERY EMPLOYER",
-    Bare_Act_Text: "Submit Form VI to notify changes in ownership within thirty days.",
-    Compliance_Clause: "Section 14 and Rule 11 H."
-},  
-{  
-    Compliance_Id: 3245,
-    IHRC_Company_Name: "",
-    Location: "VWX - Office - Saharsa - sadtpur - HR/ Saharsa/ Bihar/ Office",
-    Legislation: "Bihar Shops and Establishments Act, 1953 and Bihar Shops Establishments Rules, 1955/ Bihar/ IR",
-    Compliance_Categorization: "LICENSE / REGISTRATION",
-    Compliance_Header: "Fire Safety Drill",
-    Compliance_Description: "Conduct a fire safety drill every six months and document the activity.",
-    Penalty_Description: "Fine which may extend to Rs. 2000",
-    Compliance_Applicability: "EVERY EMPLOYER",
-    Bare_Act_Text: "Maintain records of fire safety drills and submit them to the local fire department.",
-    Compliance_Clause: "Section 15 and Rule 12 I."
-},  
-{  
-    Compliance_Id: 3246,
-    IHRC_Company_Name: "",
-    Location: "YZA - Office - Chapra - sadtpur - HR/ Chapra/ Bihar/ Office",
-    Legislation: "Bihar Shops and Establishments Act, 1953 and Bihar Shops Establishments Rules, 1955/ Bihar/ IR",
-    Compliance_Categorization: "LICENSE / REGISTRATION",
-    Compliance_Header: "Inspection Register",
-    Compliance_Description: "Maintain an inspection register and present it during inspections by the labour department.",
-    Penalty_Description: "Fine which may extend to Rs. 300",
-    Compliance_Applicability: "EVERY EMPLOYER",
-    Bare_Act_Text: "Keep the inspection register updated and available for inspection at all times.",
-    Compliance_Clause: "Section 16 and Rule 13 J."
-},  
-{  
-    Compliance_Id: 3247,
-    IHRC_Company_Name: "",
-    Location: "BCD - Office - Munger - sadtpur - HR/ Munger/ Bihar/ Office",
-    Legislation: "Bihar Shops and Establishments Act, 1953 and Bihar Shops Establishments Rules, 1955/ Bihar/ IR",
-    Compliance_Categorization: "LICENSE / REGISTRATION",
-    Compliance_Header: "Health and Safety Measures",
-    Compliance_Description: "Implement health and safety measures for employees and conduct regular audits.",
-    Penalty_Description: "Fine which may extend to Rs. 5000",
-    Compliance_Applicability: "EVERY EMPLOYER",
-    Bare_Act_Text: "Ensure compliance with health and safety regulations and conduct regular internal audits.",
-    Compliance_Clause: "Section 17 and Rule 14 K."
-},  
-{  
-    Compliance_Id: 3248,
-    IHRC_Company_Name: "",
-    Location: "EFG - Office - Begusarai - sadtpur - HR/ Begusarai/ Bihar/ Office",
-    Legislation: "Bihar Shops and Establishments Act, 1953 and Bihar Shops Establishments Rules, 1955/ Bihar/ IR",
-    Compliance_Categorization: "LICENSE / REGISTRATION",
-    Compliance_Header: "Annual Fire Audit",
-    Compliance_Description: "Conduct an annual fire audit and submit the report to the local fire department.",
-    Penalty_Description: "Fine which may extend to Rs. 3000",
-    Compliance_Applicability: "EVERY EMPLOYER",
-    Bare_Act_Text: "Submit the fire audit report annually to the local fire department.",
-    Compliance_Clause: "Section 18 and Rule 15 L."
-},  
-{  
-    Compliance_Id: 3249,
-    IHRC_Company_Name: "",
-    Location: "HIJ - Office - Jehanabad - sadtpur - HR/ Jehanabad/ Bihar/ Office",
-    Legislation: "Bihar Shops and Establishments Act, 1953 and Bihar Shops Establishments Rules, 1955/ Bihar/ IR",
-    Compliance_Categorization: "LICENSE / REGISTRATION",
-    Compliance_Header: "Employee Grievance Redressal",
-    Compliance_Description: "Establish a grievance redressal mechanism for employees and document the grievances.",
-    Penalty_Description: "Fine which may extend to Rs. 1500",
-    Compliance_Applicability: "EVERY EMPLOYER",
-    Bare_Act_Text: "Set up a grievance redressal committee and keep records of all grievances filed by employees.",
-    Compliance_Clause: "Section 19 and Rule 16 M."
-},  
-{  
-    Compliance_Id: 3250,
-    IHRC_Company_Name: "",
-    Location: "KLM - Office - Buxar - sadtpur - HR/ Buxar/ Bihar/ Office",
-    Legislation: "Bihar Shops and Establishments Act, 1953 and Bihar Shops Establishments Rules, 1955/ Bihar/ IR",
-    Compliance_Categorization: "LICENSE / REGISTRATION",
-    Compliance_Header: "Workplace Safety Audit",
-    Compliance_Description: "Conduct a workplace safety audit every year and implement the recommendations.",
-    Penalty_Description: "Fine which may extend to Rs. 4000",
-    Compliance_Applicability: "EVERY EMPLOYER",
-    Bare_Act_Text: "Ensure that the workplace safety audit is conducted annually and the findings are acted upon.",
-    Compliance_Clause: "Section 20 and Rule 17 N."
-},  
-];
 
-const categorizationColor: Record<string, { label: string, dotClass: string, textClass: string }> = {
-    'LICENSE / REGISTRATION': {
-        label: 'License / Registration',
-        dotClass: 'bg-emerald-500',
-        textClass: 'text-emerald-500',
+// Replace dummyData with the new dataset
+const dummyData: DataRow[] =  [
+    {
+        Compliance_Id: 3236,
+        Legislation: "Bihar Shops and Establishments Act 1953 and Bihar Shops Establishments Rules 1955/ Bihar/ IR",
+        Compliance_Categorization: "LICENSE / REGISTRATION",
+        Compliance_Header: "Renewal of Registration",
+        Compliance_Description: "Apply for renewal of certificate of registration in Form IA in duplicate not less than thirty days before the date on which the certificate of registration expires to the Inspecting Officer along with the prescribed fees.",
+        Penalty_Description: "Fine which may extend to Rs. 250",
+        Compliance_Applicability: "EVERY EMPLOYER",
+        Bare_Act_Text: "Make an application when registration certificate is lost or destroyed to the Inspecting Officer within seven days of such loss or destruction for a duplicate copy along with a payment of a fee of two rupees either by crossed Indian Postal Order or by d",
+        Compliance_Clause: "Section 6 and Rule 3 A",
+        Compliance_Type: "On Going",
+        Compliance_Frequency: "Half Yearly",
+        Compliance_Statutory_Authority: "CHIEF INSPECTOR OF SHOPS AND COMMERCIAL ESTABLISHMENTS/REGISTERING OFFICER",
+        Approval_Required: "Yes",
+        Criticality: "High",
+        Penalty_Type: "Fine",
+        Default_Due_Date: "20th July 20th Jan",
+        First_Due_Date: "15-Apr-16",
+        Due_Date: "14-Apr-17",
+        Scheduled_Frequency: "Yearly",
+        Proof_Of_Compliance_Mandatory: "Yes"
     },
-    // Add more categories as needed
-}
+    {
+        Compliance_Id: 4501,
+        Legislation: "Delhi Factories Act 1948 and Delhi Factories Rules 1950/ Delhi/ IR",
+        Compliance_Categorization: "LICENSE / REGISTRATION",
+        Compliance_Header: "Annual Renewal of License",
+        Compliance_Description: "Submit an application for the renewal of the factory license in Form 1A, at least 45 days before the expiry date, to the Factory Inspector along with the required fees.",
+        Penalty_Description: "Penalty may extend up to Rs. 500",
+        Compliance_Applicability: "FACTORY OWNER",
+        Bare_Act_Text: "In case the factory license is lost, notify the Factory Inspector immediately and apply for a duplicate license along with a fee of ten rupees.",
+        Compliance_Clause: "Section 4 and Rule 6",
+        Compliance_Type: "On Going",
+        Compliance_Frequency: "Annually",
+        Compliance_Statutory_Authority: "FACTORY INSPECTOR",
+        Approval_Required: "Yes",
+        Criticality: "Medium",
+        Penalty_Type: "Fine",
+        Default_Due_Date: "1st March 1st September",
+        First_Due_Date: "01-Jan-17",
+        Due_Date: "31-Dec-17",
+        Scheduled_Frequency: "Yearly",
+        Proof_Of_Compliance_Mandatory: "Yes"
+    },
+    {
+        Compliance_Id: 5602,
+        Legislation: "Karnataka Shops and Commercial Establishments Act 1961 and Karnataka Shops Rules 1963/ Karnataka/ IR",
+        Compliance_Categorization: "REGISTRATION / REPORTING",
+        Compliance_Header: "Monthly Compliance Report",
+        Compliance_Description: "File a monthly compliance report in Form IX with the Labour Department, detailing employee work hours and wages paid, by the 5th of each month.",
+        Penalty_Description: "Penalty up to Rs. 1000 for late submission",
+        Compliance_Applicability: "SHOPS AND ESTABLISHMENTS",
+        Bare_Act_Text: "Report any changes in employment status or wages to the Labour Department within seven days of occurrence, along with a fee of five rupees for each report.",
+        Compliance_Clause: "Section 12 and Rule 10",
+        Compliance_Type: "Ongoing",
+        Compliance_Frequency: "Monthly",
+        Compliance_Statutory_Authority: "LABOUR COMMISSIONER",
+        Approval_Required: "No",
+        Criticality: "High",
+        Penalty_Type: "Fine",
+        Default_Due_Date: "5th of each month",
+        First_Due_Date: "01-Feb-18",
+        Due_Date: "05-Feb-18",
+        Scheduled_Frequency: "Monthly",
+        Proof_Of_Compliance_Mandatory: "Yes"
+    },
+    {
+        Compliance_Id: 6789,
+        Legislation: "Maharashtra Shops and Establishments Act 1948 and Maharashtra Shops Rules 1954/ Maharashtra/ IR",
+        Compliance_Categorization: "REPORTING",
+        Compliance_Header: "Quarterly Wage Report",
+        Compliance_Description: "Submit a quarterly wage report in Form XIV to the Labour Commissioner by the 15th of the first month following the end of the quarter.",
+        Penalty_Description: "Fine up to Rs. 500 for late submission",
+        Compliance_Applicability: "EMPLOYERS",
+        Bare_Act_Text: "File any discrepancies in wages with the Labour Commissioner within fifteen days of detection, accompanied by a fee of ten rupees.",
+        Compliance_Clause: "Section 12 and Rule 14",
+        Compliance_Type: "Ongoing",
+        Compliance_Frequency: "Quarterly",
+        Compliance_Statutory_Authority: "LABOUR COMMISSIONER",
+        Approval_Required: "No",
+        Criticality: "Medium",
+        Penalty_Type: "Fine",
+        Default_Due_Date: "15th of January, April, July, October",
+        First_Due_Date: "15-Jan-18",
+        Due_Date: "15-Jan-18",
+        Scheduled_Frequency: "Quarterly",
+        Proof_Of_Compliance_Mandatory: "Yes"
+    },
+    {
+        Compliance_Id: 7890,
+        Legislation: "Tamil Nadu Shops and Establishments Act 1947 and Tamil Nadu Shops Rules 1959/ Tamil Nadu/ IR",
+        Compliance_Categorization: "LICENSE / REGISTRATION",
+        Compliance_Header: "Renewal of Trade License",
+        Compliance_Description: "Apply for the renewal of the trade license in Form VII at least 30 days before the license expiry date to the Municipal Authority along with the necessary fee.",
+        Penalty_Description: "Late fee up to Rs. 300",
+        Compliance_Applicability: "TRADE LICENSE HOLDERS",
+        Bare_Act_Text: "In case of loss of the trade license, report to the Municipal Authority within seven days and apply for a duplicate license with a fee of fifteen rupees.",
+        Compliance_Clause: "Section 5 and Rule 8",
+        Compliance_Type: "On Going",
+        Compliance_Frequency: "Annually",
+        Compliance_Statutory_Authority: "MUNICIPAL AUTHORITY",
+        Approval_Required: "Yes",
+        Criticality: "High",
+        Penalty_Type: "Fine",
+        Default_Due_Date: "1st June 1st December",
+        First_Due_Date: "01-June-17",
+        Due_Date: "01-June-17",
+        Scheduled_Frequency: "Yearly",
+        Proof_Of_Compliance_Mandatory: "Yes"
+    },
+    {
+        Compliance_Id: 8912,
+        Legislation: "Uttar Pradesh Shops and Establishments Act 1962 and Uttar Pradesh Shops Rules 1964/ Uttar Pradesh/ IR",
+        Compliance_Categorization: "REGISTRATION / REPORTING",
+        Compliance_Header: "Annual Health and Safety Report",
+        Compliance_Description: "Submit an annual health and safety report in Form V to the Labour Department by the end of the financial year.",
+        Penalty_Description: "Penalty up to Rs. 1000 for non-submission",
+        Compliance_Applicability: "EMPLOYERS",
+        Bare_Act_Text: "Notify any health and safety incidents to the Labour Department within seven days, with a fee of twenty rupees for each incident report.",
+        Compliance_Clause: "Section 9 and Rule 7",
+        Compliance_Type: "Ongoing",
+        Compliance_Frequency: "Annually",
+        Compliance_Statutory_Authority: "LABOUR DEPARTMENT",
+        Approval_Required: "No",
+        Criticality: "High",
+        Penalty_Type: "Fine",
+        Default_Due_Date: "31st March",
+        First_Due_Date: "31-Mar-18",
+        Due_Date: "31-Mar-18",
+        Scheduled_Frequency: "Yearly",
+        Proof_Of_Compliance_Mandatory: "Yes"
+    },
+    {
+        Compliance_Id: 9023,
+        Legislation: "West Bengal Shops and Establishments Act 1963 and West Bengal Shops Rules 1964/ West Bengal/ IR",
+        Compliance_Categorization: "REPORTING",
+        Compliance_Header: "Monthly Employee Attendance Report",
+        Compliance_Description: "File a monthly employee attendance report in Form XII to the Labour Inspector by the 7th of each month.",
+        Penalty_Description: "Penalty of Rs. 500 for late submission",
+        Compliance_Applicability: "EMPLOYERS",
+        Bare_Act_Text: "Report any discrepancies in attendance records within fifteen days, with a fee of ten rupees per report.",
+        Compliance_Clause: "Section 15 and Rule 20",
+        Compliance_Type: "Ongoing",
+        Compliance_Frequency: "Monthly",
+        Compliance_Statutory_Authority: "LABOUR INSPECTOR",
+        Approval_Required: "No",
+        Criticality: "Medium",
+        Penalty_Type: "Fine",
+        Default_Due_Date: "7th of each month",
+        First_Due_Date: "07-Feb-18",
+        Due_Date: "07-Feb-18",
+        Scheduled_Frequency: "Monthly",
+        Proof_Of_Compliance_Mandatory: "Yes"
+    },
+    {
+        Compliance_Id: 1034,
+        Legislation: "Punjab Shops and Commercial Establishments Act 1958 and Punjab Shops Rules 1959/ Punjab/ IR",
+        Compliance_Categorization: "LICENSE / REGISTRATION",
+        Compliance_Header: "Trade License Renewal",
+        Compliance_Description: "Renew the trade license in Form VIII at least 60 days before the license expiry date, and submit it to the Municipal Corporation with the required fee.",
+        Penalty_Description: "Late renewal fee up to Rs. 400",
+        Compliance_Applicability: "TRADE LICENSE HOLDERS",
+        Bare_Act_Text: "If the trade license is lost, report to the Municipal Corporation within seven days and apply for a duplicate license with a fee of twenty rupees.",
+        Compliance_Clause: "Section 7 and Rule 10",
+        Compliance_Type: "On Going",
+        Compliance_Frequency: "Annually",
+        Compliance_Statutory_Authority: "MUNICIPAL CORPORATION",
+        Approval_Required: "Yes",
+        Criticality: "High",
+        Penalty_Type: "Fine",
+        Default_Due_Date: "1st July 1st January",
+        First_Due_Date: "01-Jul-17",
+        Due_Date: "01-Jul-17",
+        Scheduled_Frequency: "Yearly",
+        Proof_Of_Compliance_Mandatory: "Yes"
+    },
+    {
+        Compliance_Id: 2145,
+        Legislation: "Kerala Shops and Commercial Establishments Act 1960 and Kerala Shops Rules 1961/ Kerala/ IR",
+        Compliance_Categorization: "REGISTRATION / REPORTING",
+        Compliance_Header: "Bi-Annual Safety Inspection Report",
+        Compliance_Description: "Submit a bi-annual safety inspection report in Form XX to the Safety Inspector by the 10th of the first month following each six-month period.",
+        Penalty_Description: "Fine up to Rs. 750 for late submission",
+        Compliance_Applicability: "SHOPS AND ESTABLISHMENTS",
+        Bare_Act_Text: "Report any safety incidents immediately to the Safety Inspector within ten days, with a fee of twenty-five rupees per incident.",
+        Compliance_Clause: "Section 18 and Rule 12",
+        Compliance_Type: "Ongoing",
+        Compliance_Frequency: "Bi-Annually",
+        Compliance_Statutory_Authority: "SAFETY INSPECTOR",
+        Approval_Required: "No",
+        Criticality: "High",
+        Penalty_Type: "Fine",
+        Default_Due_Date: "10th of January and July",
+        First_Due_Date: "10-Jan-18",
+        Due_Date: "10-Jan-18",
+        Scheduled_Frequency: "Bi-Annually",
+        Proof_Of_Compliance_Mandatory: "Yes"
+    },
+    {
+        Compliance_Id: 3257,
+        Legislation: "Andhra Pradesh Shops and Establishments Act 1988 and Andhra Pradesh Shops Rules 1990/ Andhra Pradesh/ IR",
+        Compliance_Categorization: "LICENSE / REGISTRATION",
+        Compliance_Header: "License Renewal for New Premises",
+        Compliance_Description: "For new premises, apply for a license renewal in Form III within 30 days of starting operations, submitting it to the Local Authority with the required fee.",
+        Penalty_Description: "Penalty up to Rs. 200 for late renewal",
+        Compliance_Applicability: "NEW ESTABLISHMENTS",
+        Bare_Act_Text: "Notify the Local Authority within seven days if the license is lost or destroyed, and apply for a duplicate with a fee of ten rupees.",
+        Compliance_Clause: "Section 8 and Rule 9",
+        Compliance_Type: "On Going",
+        Compliance_Frequency: "Annually",
+        Compliance_Statutory_Authority: "LOCAL AUTHORITY",
+        Approval_Required: "Yes",
+        Criticality: "Medium",
+        Penalty_Type: "Fine",
+        Default_Due_Date: "1st August 1st February",
+        First_Due_Date: "01-Aug-17",
+        Due_Date: "01-Aug-17",
+        Scheduled_Frequency: "Yearly",
+        Proof_Of_Compliance_Mandatory: "Yes"
+    },
+    {
+        Compliance_Id: 4368,
+        Legislation: "Gujarat Shops and Establishments Act 1948 and Gujarat Shops Rules 1950/ Gujarat/ IR",
+        Compliance_Categorization: "REPORTING",
+        Compliance_Header: "Annual Employee Benefits Report",
+        Compliance_Description: "File an annual report of employee benefits in Form XI with the Labour Department by the end of each financial year.",
+        Penalty_Description: "Fine up to Rs. 600 for late submission",
+        Compliance_Applicability: "EMPLOYERS",
+        Bare_Act_Text: "Notify any changes in employee benefits within fifteen days of the change, with a fee of fifteen rupees per change report.",
+        Compliance_Clause: "Section 20 and Rule 16",
+        Compliance_Type: "Ongoing",
+        Compliance_Frequency: "Annually",
+        Compliance_Statutory_Authority: "LABOUR DEPARTMENT",
+        Approval_Required: "No",
+        Criticality: "Medium",
+        Penalty_Type: "Fine",
+        Default_Due_Date: "31st March",
+        First_Due_Date: "31-Mar-18",
+        Due_Date: "31-Mar-18",
+        Scheduled_Frequency: "Yearly",
+        Proof_Of_Compliance_Mandatory: "Yes"
+    },
+    
+];
 
 
 const ViewDetailsButton = ({ compliance }: { compliance: DataRow }) => {
@@ -256,64 +304,80 @@ const ComplianceTableContent: React.FC = () => {
             {
                 header: 'Compliance ID',
                 accessorKey: 'Compliance_Id',
+                cell: (props) => (
+                    <div className="w-32 text-start">{props.getValue()}</div>
+                ),
             },
             {
-                header: 'Location',
-                accessorKey: 'Location',
+                header: 'Legislation',
+                accessorKey: 'Legislation',
                 cell: (props) => {
-                    const { Location } = props.row.original
-                    return <span className="capitalize">{Location.split(' - ')[2]}</span>
+                    const { Legislation } = props.row.original
+                    return (
+                        <Tooltip title={Legislation} placement="top">
+                            <div className="w-36 truncate">
+                                {Legislation}
+                            </div>
+                        </Tooltip>
+                    )
                 },
             },
+            // {
+            //     header: 'Category',
+            //     accessorKey: 'Compliance_Categorization',
+            //     cell: (props) => {
+            //         const value = props.getValue() as string
+            //         return (
+            //             <Tooltip title={value} placement="top">
+            //                 <div className="w-32 truncate">
+            //                     {value}
+            //                 </div>
+            //             </Tooltip>
+            //         )
+            //     },
+            // },
             {
-                header: 'Categorization',
-                accessorKey: 'Compliance_Categorization',
+                header: 'Header',
+                accessorKey: 'Compliance_Header',
                 cell: (props) => {
-                    const { Compliance_Categorization } = props.row.original
+                    const value = props.getValue() as string
                     return (
-                        <div className="flex items-center gap-2">
-                            <Badge
-                                className={
-                                    categorizationColor[Compliance_Categorization]?.dotClass
-                                }
-                            />
-                            <span
-                                className={`capitalize font-semibold ${categorizationColor[Compliance_Categorization]?.textClass}`}
-                            >
-                                {categorizationColor[Compliance_Categorization]?.label}
-                            </span>
-                        </div>
+                        <Tooltip title={value} placement="top">
+                            <div className="w-40 truncate">
+                                {value}
+                            </div>
+                        </Tooltip>
                     )
                 },
             },
             {
-              header: 'Description',
-              accessorKey: 'Compliance_Description',
-              cell: (props) => {
-                  const { Compliance_Description } = props.row.original
-                  const maxLength = 40
-                  const truncatedDescription = Compliance_Description.length > maxLength
-                      ? Compliance_Description.substring(0, maxLength) + '...'
-                      : Compliance_Description
-                  return (
-                      <span title={Compliance_Description} className="block max-w-md truncate">
-                          {truncatedDescription}
-                      </span>
-                  )
-              },
+                header: 'Description',
+                accessorKey: 'Compliance_Description',
+                cell: (props) => {
+                    const { Compliance_Description } = props.row.original
+                    return (
+                        <Tooltip title={Compliance_Description} placement="top">
+                            <div className="w-64 lg:w-96 truncate">
+                                {Compliance_Description}
+                            </div>
+                        </Tooltip>
+                    )
+                },
             },
             {
                 header: '',
                 id: 'viewDetails',
                 cell: (props) => (
-                    <ViewDetailsButton compliance={props.row.original} />
-
+                    <div className="w-24 flex justify-center">
+                        <Tooltip title="View Details" placement="left">
+                            <ViewDetailsButton compliance={props.row.original} />
+                        </Tooltip>
+                    </div>
                 ),
             },
         ],
         [navigate]
     )
-
     const [tableData, setTableData] = useState({
         total: dummyData.length,
         pageIndex: 1,
@@ -342,22 +406,26 @@ const ComplianceTableContent: React.FC = () => {
     }
 
     return (
-        <DataTable
-            columns={columns}
-            data={dummyData}
-            skeletonAvatarColumns={[0]}
-            skeletonAvatarProps={{ className: 'rounded-md' }}
-            loading={false}
-            pagingData={{
-                total: tableData.total,
-                pageIndex: tableData.pageIndex,
-                pageSize: tableData.pageSize,
-            }}
-            onPaginationChange={onPaginationChange}
-            onSelectChange={onSelectChange}
-            onSort={onSort}
-        />
+        <div className="w-full">
+            <DataTable
+                columns={columns}
+                data={dummyData}
+                skeletonAvatarColumns={[0]}
+                skeletonAvatarProps={{ className: 'rounded-md' }}
+                loading={false}
+                pagingData={{
+                    total: tableData.total,
+                    pageIndex: tableData.pageIndex,
+                    pageSize: tableData.pageSize,
+                }}
+                onPaginationChange={onPaginationChange}
+                onSelectChange={onSelectChange}
+                onSort={onSort}
+                // className="w-full"
+            />
+        </div>
     )
 }
 
 export default ComplianceTableContent
+

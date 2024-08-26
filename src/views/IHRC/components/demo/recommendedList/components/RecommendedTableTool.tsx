@@ -24,7 +24,7 @@ const RecommendedTableTool = () => {
                 to=""
             >
                 <Button block variant="solid" size="sm" icon={<HiPlusCircle />}>
-                    Assign Checklist
+                   Assign Checklist
                 </Button>
             </Link>
         </div>
