@@ -18,40 +18,40 @@ const initialData: ChecklistDataRow[] = [
     Compliance_ID: 3236,
     Compliance_Header: 'Renewal of Registration',
     Due_Date: new Date('2024-09-15'),
-    Owner_Name: 'John Doe',
-    Approver_Name: 'Jane Smith'
+    Owner_Name: 'Admin',
+    Approver_Name: 'Shivesh Verma'
   },
   {
     Compliance_Instance_ID: 1002,
     Compliance_ID: 4501,
     Compliance_Header: 'Annual Renewal of License',
     Due_Date: new Date('2024-10-01'),
-    Owner_Name: 'Alice Johnson',
-    Approver_Name: 'Robert Brown'
+    Owner_Name: 'HR',
+    Approver_Name: 'Shivesh Verma'
   },
   {
     Compliance_Instance_ID: 1003,
     Compliance_ID: 5602,
     Compliance_Header: 'Monthly Compliance Report',
     Due_Date: new Date('2024-09-05'),
-    Owner_Name: 'Michael Lee',
-    Approver_Name: 'Emily Davis'
+    Owner_Name: 'Finance',
+    Approver_Name: 'Shivesh Verma'
   },
   {
     Compliance_Instance_ID: 1004,
     Compliance_ID: 6789,
     Compliance_Header: 'Quarterly Wage Report',
     Due_Date: new Date('2024-10-15'),
-    Owner_Name: 'Sarah Wilson',
-    Approver_Name: 'David Clark'
+    Owner_Name: 'Ravi Shankar Singh',
+    Approver_Name: 'Shivesh Verma'
   },
   {
     Compliance_Instance_ID: 1005,
     Compliance_ID: 7890,
     Compliance_Header: 'Renewal of Trade License',
     Due_Date: new Date('2024-11-01'),
-    Owner_Name: 'Linda Martinez',
-    Approver_Name: 'James Lewis'
+    Owner_Name: 'HR',
+    Approver_Name: 'Shivesh Verma'
   }
 ];
 
@@ -90,24 +90,25 @@ const AssignChecklistTable: React.FC = () => {
   };
 
   const EditIcon = () => (
-    <svg
-      stroke="currentColor"
-      fill="none"
-      strokeWidth="2"
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      height="1em"
-      width="1em"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-      ></path>
-    </svg>
+    <span className="text-[#7c828e] hover:text-indigo-600">
+      <svg
+        fill="none"
+        strokeWidth="2"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        height="1em"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+        ></path>
+      </svg>
+    </span>
   );
-
   const columns: ColumnDef<ChecklistDataRow>[] = useMemo(
     () => [
       {
@@ -121,7 +122,7 @@ const AssignChecklistTable: React.FC = () => {
         header: 'Compliance ID',
         accessorKey: 'Compliance_ID',
         cell: (props) => (
-          <div className="w-32 text-start">{props.getValue()}</div>
+          <div className="w-20 text-start">{props.getValue()}</div>
         ),
       },
       {
@@ -131,7 +132,7 @@ const AssignChecklistTable: React.FC = () => {
           const value = props.getValue() as string;
           return (
             <Tooltip title={value} placement="top">
-              <div className="w-24 truncate">{value}</div>
+              <div className="w-28 truncate">{value}</div>
             </Tooltip>
           );
         },
@@ -155,7 +156,7 @@ const AssignChecklistTable: React.FC = () => {
         header: "Approver's Name",
         accessorKey: 'Approver_Name',
         cell: ({ getValue }) => {
-          return <div className="w-46">{getValue<string>()}</div>;
+          return <div className="w-38">{getValue<string>()}</div>;
         },
       },
       {
@@ -167,6 +168,7 @@ const AssignChecklistTable: React.FC = () => {
             variant="plain"
             onClick={() => handleEditClick(row.original)}
             icon={<EditIcon />}
+            className='hover:bg-transparent'
           />
         ),
       },
@@ -218,7 +220,8 @@ const AssignChecklistTable: React.FC = () => {
         onRequestClose={() => setIsEditDialogOpen(false)}
         className="w-full max-w-md p-6"
       >
-        <h5 className="mb-4 text-lg font-semibold">Edit Checklist Item</h5>
+        <h5 className="mb-4 text-lg font-semibold">  Compliance Instance ID: <span className="text-indigo-600">{editData.Compliance_Instance_ID}</span>
+        </h5>
         <div className="space-y-4">
           <div>
             <label className="block mb-2">Due Date</label>
@@ -227,7 +230,9 @@ const AssignChecklistTable: React.FC = () => {
   onChange={(date) => setEditData({ ...editData, Due_Date: date })}
 />
           </div>
-          <div>
+          <div className='flex flex-col gap-4'>
+            <div>
+
           <label className="block mb-2">Owner's Name</label>
           <Select
             options={[
@@ -240,7 +245,10 @@ const AssignChecklistTable: React.FC = () => {
             value={editData.Owner_Name ? { value: editData.Owner_Name, label: editData.Owner_Name } : null}
             onChange={(selectedOption) => setEditData({ ...editData, Owner_Name: selectedOption ? selectedOption.value : '' })}
             isClearable
-          />
+            />
+            </div>
+            <div>
+
           <label className="block mb-2">Approver's Name</label>
           <Select
             options={[
@@ -252,7 +260,8 @@ const AssignChecklistTable: React.FC = () => {
             value={editData.Approver_Name ? { value: editData.Approver_Name, label: editData.Approver_Name } : null}
             onChange={(selectedOption) => setEditData({ ...editData, Approver_Name: selectedOption ? selectedOption.value : '' })}
             isClearable
-          />
+            />
+            </div>
           </div>
         </div>
         <div className="mt-6 text-right">
