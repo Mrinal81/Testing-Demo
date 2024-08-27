@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { ColumnDef, OnSortParam } from '@/components/shared/DataTable';
 import DataTable from '@/components/shared/DataTable';
-import { Button, Calendar, Dialog, Tooltip } from '@/components/ui';
-
+import { Button, Calendar, Dialog, Tooltip, Select } from '@/components/ui';
+import { RiEditLine } from 'react-icons/ri';
 interface ChecklistDataRow {
   Compliance_Instance_ID: number;
   Compliance_ID: number;
@@ -58,47 +58,55 @@ const initialData: ChecklistDataRow[] = [
 const AssignChecklistTable: React.FC = () => {
   const [data, setData] = useState<ChecklistDataRow[]>(initialData);
   const [activeRowId, setActiveRowId] = useState<number | null>(null);
-  const [calendarValue, setCalendarValue] = useState<Date | undefined>(undefined);
-  const [dialogType, setDialogType] = useState<'dueDate' | 'ownerName' | 'approverName' | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editData, setEditData] = useState<Partial<ChecklistDataRow>>({});
 
-  const handleDateChange = (newDate: Date | undefined) => {
-    if (newDate && activeRowId) {
-      setData((prevData) =>
-        prevData.map((item) =>
-          item.Compliance_Instance_ID === activeRowId
-            ? { ...item, Due_Date: newDate }
-            : item
-        )
-      );
-      setDialogType(null);
-    }
+  const handleEditClick = (row: ChecklistDataRow) => {
+    setActiveRowId(row.Compliance_Instance_ID);
+    setEditData({
+      Compliance_Instance_ID: row.Compliance_Instance_ID,
+      Compliance_ID: row.Compliance_ID,
+      Compliance_Header: row.Compliance_Header,
+      Due_Date: row.Due_Date,
+      Owner_Name: row.Owner_Name,
+      Approver_Name: row.Approver_Name,
+    });
+    setIsEditDialogOpen(true);
   };
 
-  const handleOwnerChange = (newOwner: string) => {
+  const handleEditSave = () => {
     if (activeRowId) {
       setData((prevData) =>
         prevData.map((item) =>
           item.Compliance_Instance_ID === activeRowId
-            ? { ...item, Owner_Name: newOwner }
+            ? { ...item, ...editData }
             : item
         )
       );
-      setDialogType(null);
+      setIsEditDialogOpen(false);
+      setActiveRowId(null);
+      setEditData({});
     }
   };
 
-  const handleApproverChange = (newApprover: string) => {
-    if (activeRowId) {
-      setData((prevData) =>
-        prevData.map((item) =>
-          item.Compliance_Instance_ID === activeRowId
-            ? { ...item, Approver_Name: newApprover }
-            : item
-        )
-      );
-      setDialogType(null);
-    }
-  };
+  const EditIcon = () => (
+    <svg
+      stroke="currentColor"
+      fill="none"
+      strokeWidth="2"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      height="1em"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+      ></path>
+    </svg>
+  );
 
   const columns: ColumnDef<ChecklistDataRow>[] = useMemo(
     () => [
@@ -106,7 +114,7 @@ const AssignChecklistTable: React.FC = () => {
         header: 'Compliance Instance ID',
         accessorKey: 'Compliance_Instance_ID',
         cell: (props) => (
-          <div className="w-32 text-start">{props.getValue()}</div>
+          <div className="w-24 text-start">{props.getValue()}</div>
         ),
       },
       {
@@ -123,7 +131,7 @@ const AssignChecklistTable: React.FC = () => {
           const value = props.getValue() as string;
           return (
             <Tooltip title={value} placement="top">
-              <div className="w-36 truncate">{value}</div>
+              <div className="w-24 truncate">{value}</div>
             </Tooltip>
           );
         },
@@ -131,69 +139,36 @@ const AssignChecklistTable: React.FC = () => {
       {
         header: 'Due Date',
         accessorKey: 'Due_Date',
-        cell: ({ row, cell }) => {
-          const currentDueDate = cell.getValue<Date>();
-          return (
-            <div className="w-32">
-              <Button
-                onClick={() => {
-                  setCalendarValue(currentDueDate);
-                  setActiveRowId(row.original.Compliance_Instance_ID);
-                  setDialogType('dueDate');
-                }}
-                size="sm"
-                variant="solid"
-                className="w-36 px-2 py-1 border rounded-md bg-indigo-500 hover:bg-indigo-500"
-              >
-                {currentDueDate ? currentDueDate.toLocaleDateString() : 'Select Date'}
-              </Button>
-            </div>
-          );
+        cell: ({ getValue }) => {
+          const date = getValue<Date>();
+          return <div className="w-32">{date.toLocaleDateString()}</div>;
         },
       },
       {
         header: "Owner's Name",
         accessorKey: 'Owner_Name',
-        cell: ({ row, cell }) => {
-          const currentOwner = cell.getValue<string>();
-          return (
-            <div className="w-42">
-              <Button
-                onClick={() => {
-                  setActiveRowId(row.original.Compliance_Instance_ID);
-                  setDialogType('ownerName');
-                }}
-                size="sm"
-                variant="solid"
-                className="w-36 px-2 py-1 border rounded-md bg-indigo-500 hover:bg-indigo-300"
-              >
-                {currentOwner}
-              </Button>
-            </div>
-          );
+        cell: ({ getValue }) => {
+          return <div className="w-44">{getValue<string>()}</div>;
         },
       },
       {
         header: "Approver's Name",
         accessorKey: 'Approver_Name',
-        cell: ({ row, cell }) => {
-          const currentApprover = cell.getValue<string>();
-          return (
-            <div className="w-46">
-              <Button
-                onClick={() => {
-                  setActiveRowId(row.original.Compliance_Instance_ID);
-                  setDialogType('approverName');
-                }}
-                size="sm"
-                variant="solid"
-                className="w-36 px-2 py-1 border rounded-md bg-indigo-500 hover:bg-indigo-300"
-              >
-                {currentApprover}
-              </Button>
-            </div>
-          );
+        cell: ({ getValue }) => {
+          return <div className="w-46">{getValue<string>()}</div>;
         },
+      },
+      {
+        header: 'Actions',
+        id: 'actions',
+        cell: ({ row }) => (
+          <Button
+            size="sm"
+            variant="plain"
+            onClick={() => handleEditClick(row.original)}
+            icon={<EditIcon />}
+          />
+        ),
       },
     ],
     []
@@ -238,74 +213,52 @@ const AssignChecklistTable: React.FC = () => {
       />
 
       <Dialog
-        isOpen={dialogType === 'dueDate'}
-        onClose={() => setDialogType(null)}
-        onRequestClose={() => setDialogType(null)}
+        isOpen={isEditDialogOpen}
+        onClose={() => setIsEditDialogOpen(false)}
+        onRequestClose={() => setIsEditDialogOpen(false)}
         className="w-full max-w-md p-6"
       >
-        <h5 className="mb-4 text-lg font-semibold">Select Due Date</h5>
-        <div className="max-h-96 overflow-y-auto">
-          <Calendar
-            value={calendarValue}
-            onChange={(date) => {
-              handleDateChange(date);
-              setCalendarValue(date);
-            }}
+        <h5 className="mb-4 text-lg font-semibold">Edit Checklist Item</h5>
+        <div className="space-y-4">
+          <div>
+            <label className="block mb-2">Due Date</label>
+            <Calendar
+  value={editData.Due_Date}
+  onChange={(date) => setEditData({ ...editData, Due_Date: date })}
+/>
+          </div>
+          <div>
+          <label className="block mb-2">Owner's Name</label>
+          <Select
+            options={[
+              { value: 'Admin', label: 'Admin' },
+              { value: 'User', label: 'User' },
+              { value: 'HR', label: 'HR' },
+              { value: 'Finance User', label: 'Finance User' },
+              { value: 'Ravi Shankar Singh', label: 'Ravi Shankar Singh' }
+            ]}
+            value={editData.Owner_Name ? { value: editData.Owner_Name, label: editData.Owner_Name } : null}
+            onChange={(selectedOption) => setEditData({ ...editData, Owner_Name: selectedOption ? selectedOption.value : '' })}
+            isClearable
           />
+          <label className="block mb-2">Approver's Name</label>
+          <Select
+            options={[
+              { value: 'Shivesh Varma', label: 'Shivesh Varma' },
+              { value: 'Amit Sharma', label: 'Amit Sharma' },
+              { value: 'Priya Singh', label: 'Priya Singh' },
+              { value: 'Ravi Kumar', label: 'Ravi Kumar' }
+            ]}
+            value={editData.Approver_Name ? { value: editData.Approver_Name, label: editData.Approver_Name } : null}
+            onChange={(selectedOption) => setEditData({ ...editData, Approver_Name: selectedOption ? selectedOption.value : '' })}
+            isClearable
+          />
+          </div>
         </div>
-      </Dialog>
-
-      <Dialog
-        isOpen={dialogType === 'ownerName'}
-        onClose={() => setDialogType(null)}
-        onRequestClose={() => setDialogType(null)}
-        className="w-full max-w-md p-6"
-      >
-        <h5 className="mb-4 text-lg font-semibold">Select Owner's Name</h5>
-        <div className="max-h-96 overflow-y-auto">
-          <ul className="list-none p-0 m-0">
-            {['Admin', 'User', 'HR', 'Finance User'].map((option) => (
-              <li
-                key={option}
-                onClick={() => handleOwnerChange(option)}
-                className="p-2 hover:bg-gray-100 cursor-pointer"
-              >
-                <Button
-                  className="w-full text-left"
-                  variant="solid"
-                >
-                  {option}
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </Dialog>
-
-      <Dialog
-        isOpen={dialogType === 'approverName'}
-        onClose={() => setDialogType(null)}
-        onRequestClose={() => setDialogType(null)}
-        className="w-full max-w-md"
-      >
-        <h5 className="mb-4 text-lg font-semibold">Select Approver's Name</h5>
-        <div className="max-h-96 overflow-y-auto">
-          <ul className="list-none p-0 m-0">
-            {['Shivesh Varma', 'Amit Sharma', 'Priya Singh', 'Ravi Kumar'].map((name) => (
-              <li
-                key={name}
-                onClick={() => handleApproverChange(name)}
-                className="p-2 hover:bg-gray-100 cursor-pointer"
-              >
-                <Button
-                  className="w-full text-left"
-                  variant="solid"
-                >
-                  {name}
-                </Button>
-              </li>
-            ))}
-          </ul>
+        <div className="mt-6 text-right">
+          <Button variant="solid" onClick={handleEditSave}>
+            Save Changes
+          </Button>
         </div>
       </Dialog>
     </div>
